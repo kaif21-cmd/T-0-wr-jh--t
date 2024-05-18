@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .summary-container {
+            border: 4px solid cyan;
+            background-color: black;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 0.5s ease;
+            position: relative; /* Positioning for buttons */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .summary-heading {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            color: green;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .summary-list li {
+            margin-bottom: 10px;
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: bold;
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .typewriter-text {
+            overflow: hidden; /* Ensures the content is not visible until the animation */
+            white-space: pre-wrap; /* Preserve whitespace and break lines */
+            margin: 0 auto; /* Center the text */
+            letter-spacing: .15em; /* Adjust as needed */
+            animation: typing 3.5s steps(40, end),
+                        blink-caret .75s step-end infinite;
+            background: linear-gradient(to right, cyan, #00FFFF); /* Apply linear gradients in dark blue */
+            -webkit-background-clip: text; /* Clip the text to the background */
+            -webkit-text-fill-color: transparent; /* Hide the actual text color */
+            font-size:1.5rem;
+            
+        }
+
+        /* The typing effect */
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        /* The typewriter cursor effect */
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: orange;
+            }
+        }
+
+        /* Positioning for buttons */
+        .buttons-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            justify-content:center;
+        }
+
+        /* Button styles */
+        .button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #333;
+            color: white;
+        }
+        .summary-container {
+            position: relative; /* Set position relative to position the buttons-container */
+        }
+        
+        .buttons-container {
+            position: absolute;
+            bottom: 10px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Adjust the style of the buttons as needed */
+        .button {
+            margin: 0 5px; /* Adjust spacing between buttons as needed */
+        }
+        
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    </style>
+    <script>
+        // Function to gradually display the lines of text in a typewriter effect
+        function typeWriter(lines, index) {
+            var line = lines[index];
+            var i = 0;
+            var speed = 50; // Typing speed in milliseconds
+            var container = document.querySelector(".typewriter-text");
+            
+            var interval = setInterval(function() {
+                if (i < line.length) {
+                    container.innerHTML += line.charAt(i);
+                    i++;
+                } else {
+                    container.innerHTML += "<br>"; // Line break after each line
+                    clearInterval(interval); // Stop the interval
+                    index++; // Move to the next line
+                    if (index < lines.length) {
+                        setTimeout(function() {
+                            typeWriter(lines, index); // Start typing the next line
+                        }, 500); // Delay before typing the next line
+                    }
+                }
+            }, speed);
+        }
+
+        // Start the typewriter effect on page load
+        window.onload = function() {
+            var lines = {{ summary | tojson }};
+            typeWriter(lines, 0);
+        };
+    </script>
+</head>
+<body>
+    <div class="summary-container">
+        <h1 class="summary-heading">Summary</h1>
+        <div class="typewriter-text"></div>
+     <br>
+     <div class="buttons-container"  style="text-align:center; justify-content:center">
+        <button class="button" onclick="copyText()" >Copy</button>
+        <button class="button" onclick="shareText()"  >Share</button>
+    </div>
+    </div>
+
+   
+
+    <script>
+        // Function to copy
